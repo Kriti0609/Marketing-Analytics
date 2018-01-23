@@ -13,7 +13,7 @@ require(Matrix)
 
 ## Text input comes from readLines(file.choose())
 ## stopwords to be input from readline readLines(file.choose())
-#++++++++++++ Defining Function to clean corpus
+# Defining Function to clean corpus
 clean_corpus<-function(text,user_stopwords){
   text=gsub("\\d+"," ",text)
   text=gsub("\\n"," ",text)
@@ -33,8 +33,7 @@ clean_corpus<-function(text,user_stopwords){
   return (textdf_final)
   
 }
-###############
-####++++++++++++++++++++++++++
+############################
 
 Build_DTM<-function(dataframe){
   dataframe = dataframe %>% mutate(doc = seq(1:nrow(dataframe))) %>% group_by(doc)
@@ -46,19 +45,20 @@ Build_DTM<-function(dataframe){
   return (regular_dtm)
 }
 
-####++++++++++++++++++++++++++++++
+#############################
 Build_WordCloud_Chart_COG(dtm)
 {
 temp<-dtm
 sum_temp = colsums(temp)
 freq_mat=data.frame(sum_temp)
-freq_mat <- freq_mat[order(freq_mat$tempq, decreasing = TRUE),,drop = FALSE]
-freq_mat=rownames_to_column(freq_mat,var = "words")
-wordcloud(freq_mat$words,freq_mat$tempq,max.words = 300)
+return (freq_mat)
+  #freq_mat <- freq_mat[order(freq_mat$tempq, decreasing = TRUE),,drop = FALSE]
+#freq_mat=rownames_to_column(freq_mat,var = "words")
+#wordcloud(freq_mat$words,freq_mat$tempq,max.words = 300)
 
 # plot barchart for top tokens
-bar_plot_frame = freq_mat[freq_mat[, "tempq"] >=30, ]
-ggplot(bar_plot_frame, aes(x=words, y=tempq)) + geom_bar(stat="identity")
+#bar_plot_frame = freq_mat[freq_mat[, "tempq"] >=30, ]
+#ggplot(bar_plot_frame, aes(x=words, y=tempq)) + geom_bar(stat="identity")
 
 }
 
