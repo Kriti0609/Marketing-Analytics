@@ -25,9 +25,7 @@ clean_corpus<-function(text,user_stopwords){
   words<-unique(all_words)
   stopword_df=data.frame(words)
   text_df=data_frame(text=text)
-  #textdf_doc = text_df %>% mutate(doc = seq(1:nrow(text_df))) %>% group_by(doc)
   text_df_token=text_df %>% unnest_tokens(words,text) 
-  #%>% count(words, sort = FALSE) %>% rename(count = n)
   textdf_final= anti_join(text_df_token,stopword_df,by="words")
   
   return (textdf_final)
@@ -40,7 +38,6 @@ Build_DTM<-function(dataframe){
   dataframe = dataframe %>% count(words, sort = FALSE) %>% rename(count = n)
   dtm<- dataframe %>% cast_dtm(doc, words, count)
   regular_dtm<-as.matrix(dtm)
-  #regular_matrix<-dataframe %>% cast_sparse(doc, words, count)
   final_tfidf_matrix=bind_tf_idf(dataframe, words, doc, count)
   return (regular_dtm)
 }
