@@ -56,7 +56,7 @@ return (freq_mat)
 #freq_mat=rownames_to_column(freq_mat,var = "words")
 #wordcloud(freq_mat$words,freq_mat$tempq,max.words = 300)
 
-# plot barchart for top tokens
+#plot barchart for top tokens
 #bar_plot_frame = freq_mat[freq_mat[, "tempq"] >=30, ]
 #ggplot(bar_plot_frame, aes(x=words, y=tempq)) + geom_bar(stat="identity")
 
