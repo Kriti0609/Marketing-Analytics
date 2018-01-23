@@ -49,10 +49,5 @@ Build_DTM<-function(dataframe){
 
 Build_WordCloud_Chart_COG(dtm)
 {
-#temp <- sort(rowSums(dtm),decreasing=TRUE)
-#d <- data.frame(word = names(v),freq=v)
-#wordcloud(dtm$words, dtm$count, max.words = 100))
-#barplot(dtm[1:10,]$count, las = 2, names.arg = dtm[1:10,]$words,
- #       col ="lightblue", main ="Most frequent words",
-  #      ylab = "Word frequencies")
+
 }
