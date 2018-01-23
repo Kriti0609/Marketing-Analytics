@@ -6,7 +6,8 @@ library(tidytext)
 
 try(require(tidyr) || install.packages("tidyr"))
 library(tidyr)
-
+try(require(wordcloud) || install.packages("wordcloud"))
+library(wordcloud)
 try(require(ggplot2) || install.packages("ggplot2"))
 library(ggplot2)
 
