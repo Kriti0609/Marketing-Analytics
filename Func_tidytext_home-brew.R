@@ -7,8 +7,8 @@ library(tidytext)
 try(require(tidyr) || install.packages("tidyr"))
 library(tidyr)
 
-try(require(ggplot) || install.packages("ggplot"))
-library(ggplot)
+try(require(ggplot2) || install.packages("ggplot2"))
+library(ggplot2)
 
 require(tibble)
 require(stringr) 
