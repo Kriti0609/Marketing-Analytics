@@ -57,6 +57,6 @@ wordcloud(freq_mat$words,freq_mat$count,max.words = 300)
 
 #plot barchart for top tokens
 bar_plot_frame = freq_mat[freq_mat[, "count"] >=30, ]
-ggplot(bar_plot_frame, aes(x=words, y=count)) + geom_bar(stat="identity")
+print(ggplot(bar_plot_frame, aes(x=words, y=count)) + geom_bar(stat="identity"))
 }
 
