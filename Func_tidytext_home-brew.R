@@ -47,7 +47,3 @@ Build_DTM<-function(dataframe){
 
 ####++++++++++++++++++++++++++++++
 
-Build_WordCloud_Chart_COG(dtm)
-{
-
-}
