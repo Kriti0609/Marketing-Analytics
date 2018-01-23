@@ -26,13 +26,25 @@ clean_corpus<-function(text,user_stopwords){
   stopword_df=data.frame(words)
   text_df=data_frame(text=text)
   textdf_doc = text_df %>% mutate(doc = seq(1:nrow(text_df))) %>% group_by(doc)
-  textdf_doc1=textdf_doc %>% unnest_tokens(words,text) %>% group_by(doc) %>% count(words, sort = TRUE) %>%  rename(count = n) 
+  textdf_doc1=textdf_doc %>% unnest_tokens(words,text) %>% count(words, sort = FALSE) %>% rename(count = n)
   textdf_final= anti_join(textdf_doc1,stopword_df,by="words")
   
   return (textdf_final)
   
 }
+##########
+### how many words in each document?
+textdf_word = textdf_doc %>% 
+              unnest_tokens(word, text) %>% 
+              mutate(word1 = 1) %>% 
+              select(doc, word1) %>%
+                  group_by(doc, word1) %>% 
+              summarise(words_doc = sum(word1)) %>% 
+              select(doc, words_doc)
 
+
+
+###############
 ####++++++++++++++++++++++++++
 
 Build_DTM<-function(dataframe){
