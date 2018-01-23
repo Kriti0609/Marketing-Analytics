@@ -36,10 +36,13 @@ clean_corpus<-function(text,user_stopwords){
 ####++++++++++++++++++++++++++
 
 Build_DTM<-function(dataframe){
+  dataframe = dataframe %>% mutate(doc = seq(1:nrow(dataframe))) %>% group_by(doc)
+  dataframe = dataframe %>% count(words, sort = FALSE) %>% rename(count = n)
   dtm<- dataframe %>% cast_dtm(doc, words, count)
-  regular_matrix<-dataframe %>% cast_sparse(doc, words, count)
-  final_tfidf_matrix=bind_tf_idf(dataframe, words, doc, count)
-  return (final_tfidf_matrix)
+  #regular_matrix<-dataframe %>% cast_sparse(doc, words, count)
+  #final_tfidf_matrix=bind_tf_idf(dataframe, words, doc, count)
+  #return (final_tfidf_matrix)
+  return (dataframe)
 }
 
 ####++++++++++++++++++++++++++++++
