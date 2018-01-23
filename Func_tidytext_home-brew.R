@@ -52,6 +52,7 @@ temp<-dtm
 sum_temp = colsums(temp)
 freq_mat=data.frame(sum_temp)
 return (freq_mat)
+}
   #freq_mat <- freq_mat[order(freq_mat$tempq, decreasing = TRUE),,drop = FALSE]
 #freq_mat=rownames_to_column(freq_mat,var = "words")
 #wordcloud(freq_mat$words,freq_mat$tempq,max.words = 300)
@@ -60,5 +61,4 @@ return (freq_mat)
 #bar_plot_frame = freq_mat[freq_mat[, "tempq"] >=30, ]
 #ggplot(bar_plot_frame, aes(x=words, y=tempq)) + geom_bar(stat="identity")
 
-}
 
