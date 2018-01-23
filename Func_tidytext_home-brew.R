@@ -8,8 +8,7 @@ try(require(tidyr) || install.packages("tidyr"))
 library(tidyr)
 
 require(tibble)
-require(stringr)
-require(text2vec)   
+require(stringr) 
 require(Matrix)	
 ## Text input comes from readLines(file.choose())
 ## stopwords to be input from readline readLines(file.choose())
@@ -32,18 +31,6 @@ clean_corpus<-function(text,user_stopwords){
   return (textdf_final)
   
 }
-##########
-### how many words in each document?
-textdf_word = textdf_doc %>% 
-              unnest_tokens(word, text) %>% 
-              mutate(word1 = 1) %>% 
-              select(doc, word1) %>%
-                  group_by(doc, word1) %>% 
-              summarise(words_doc = sum(word1)) %>% 
-              select(doc, words_doc)
-
-
-
 ###############
 ####++++++++++++++++++++++++++
 
