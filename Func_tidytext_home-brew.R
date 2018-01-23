@@ -24,8 +24,9 @@ clean_corpus<-function(text,user_stopwords){
   words<-unique(all_words)
   stopword_df=data.frame(words)
   text_df=data_frame(text=text)
-  textdf_doc = text_df %>% mutate(doc = seq(1:nrow(text_df))) %>% group_by(doc)
-  textdf_doc1=textdf_doc %>% unnest_tokens(words,text) %>% count(words, sort = FALSE) %>% rename(count = n)
+  #textdf_doc = text_df %>% mutate(doc = seq(1:nrow(text_df))) %>% group_by(doc)
+  textdf_doc1=textdf_doc %>% unnest_tokens(words,text) 
+  #%>% count(words, sort = FALSE) %>% rename(count = n)
   textdf_final= anti_join(textdf_doc1,stopword_df,by="words")
   
   return (textdf_final)
