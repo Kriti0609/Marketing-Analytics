@@ -39,12 +39,20 @@ Build_DTM<-function(dataframe){
   dataframe = dataframe %>% mutate(doc = seq(1:nrow(dataframe))) %>% group_by(doc)
   dataframe = dataframe %>% count(words, sort = FALSE) %>% rename(count = n)
   dtm<- dataframe %>% cast_dtm(doc, words, count)
+  regular_dtm<-as.matrix(dtm)
   #regular_matrix<-dataframe %>% cast_sparse(doc, words, count)
-  #final_tfidf_matrix=bind_tf_idf(dataframe, words, doc, count)
-  #return (final_tfidf_matrix)
-  return (dataframe)
+  final_tfidf_matrix=bind_tf_idf(dataframe, words, doc, count)
+  return (regular_dtm)
 }
 
 ####++++++++++++++++++++++++++++++
 
-
+Build_WordCloud_Chart_COG(dtm)
+{
+temp <- sort(rowSums(dtm),decreasing=TRUE)
+d <- data.frame(word = names(v),freq=v)
+wordcloud(dtm$words, dtm$count, max.words = 100))
+#barplot(dtm[1:10,]$count, las = 2, names.arg = dtm[1:10,]$words,
+ #       col ="lightblue", main ="Most frequent words",
+  #      ylab = "Word frequencies")
+}
