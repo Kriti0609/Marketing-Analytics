@@ -11,21 +11,16 @@ require(tibble)
 require(stringr)
 require(text2vec)   
 require(Matrix)	
-
+## Text input comes from readLines(file.choose())
+## stopwords to be input from readline readLines(file.choose())
 #++++++++++++ Defining Function to clean corpus
-clean_corpus<-function(text){
+clean_corpus<-function(text,user_stopwords){
   text=gsub("\\d+"," ",text)
   text=gsub("\\n"," ",text)
   text=gsub("\\%"," ",text)
   text=gsub("<.*?>"," ",text)
   text=gsub("\\s+|\\s+?"," ",text)
   std_stopwords<-c(stop_words$word)
-  user_stopwords<-c()
-  word=readline("Enter a stopword(Enter end to finish input):")
-  while(word!="end"){
-    user_stopwords<-append(user_stopwords,word)
-    word<-readline("Enter a stopword(Enter end to finish input):")
-                    }
   words<-append(std_stopwords,user_stopwords)
   words<-unique(words)
   stopword_df=data.frame(words)
