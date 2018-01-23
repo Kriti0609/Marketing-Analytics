@@ -7,6 +7,9 @@ library(tidytext)
 try(require(tidyr) || install.packages("tidyr"))
 library(tidyr)
 
+try(require(ggplot) || install.packages("ggplot"))
+library(ggplot)
+
 require(tibble)
 require(stringr) 
 require(Matrix)	
@@ -45,16 +48,14 @@ Build_DTM<-function(dataframe){
 #############################
 Build_WordCloud_Chart_COG<-function(dtm){
 temp<-dtm
-sum_temp = colSums(temp)
-freq_mat=data.frame(sum_temp)
-return (freq_mat)
-}
-  #freq_mat <- freq_mat[order(freq_mat$tempq, decreasing = TRUE),,drop = FALSE]
-#freq_mat=rownames_to_column(freq_mat,var = "words")
-#wordcloud(freq_mat$words,freq_mat$tempq,max.words = 300)
+count = colSums(temp)
+freq_mat=data.frame(count)
+freq_mat <- freq_mat[order(freq_mat$count, decreasing = TRUE),,drop = FALSE]
+freq_mat=rownames_to_column(freq_mat,var = "words")
+wordcloud(freq_mat$words,freq_mat$count,max.words = 300)
 
 #plot barchart for top tokens
-#bar_plot_frame = freq_mat[freq_mat[, "tempq"] >=30, ]
-#ggplot(bar_plot_frame, aes(x=words, y=tempq)) + geom_bar(stat="identity")
-
+bar_plot_frame = freq_mat[freq_mat[, "count"] >=30, ]
+ggplot(bar_plot_frame, aes(x=words, y=count)) + geom_bar(stat="identity")
+}
 
