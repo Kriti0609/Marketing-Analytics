@@ -46,7 +46,7 @@ Build_DTM<-function(dataframe){
 }
 
 #############################
-Build_WordCloud_Chart_COG(dtm)
+Build_WordCloud_Chart_COG<-function(dtm)
 {
 temp<-dtm
 sum_temp = colsums(temp)
