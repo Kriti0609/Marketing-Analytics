@@ -62,3 +62,59 @@ bar_plot_frame = freq_mat[freq_mat[, "count"] >=30, ]
 print(ggplot(bar_plot_frame, aes(x=words, y=count)) + geom_bar(stat="identity"))
 }
 
+
+#############################################################################################################
+
+sentiment_analysis<-function(String,emo){
+textdf = data_frame(text = String)
+textdf_line = textdf%>%mutate(linenumber=row_number())
+senti.nrc = textdf_line%>%
+ungroup() %>%
+unnest_tokens(word,text) %>%
+inner_join(get_sentiments("nrc")) %>% 
+count(sentiment,index=linenumber %/% 1, sort = FALSE) %>%
+mutate(method="nrc")
+
+df_emo1=data.frame()
+df_emo2=data.frame()
+df_emo3=data.frame()
+
+# Create dataframe for top 3 documents with emotion 1:
+senti.nrc %>% filter(sentiment == emo[1])
+ans1=arrange(senti.nrc %>% filter(sentiment == emo[1]),desc(n) )   
+ans2= ans1 %>% slice(1:3)
+for(i in 1:3){
+ind = ans2$index[i]
+df_emo1=rbind((textdf_line%>%filter(textdf_line$linenumber==ind)),df_emo1)
+	}
+df_emo1=cbind(df_emo1,emotions=emo[1])
+
+
+# Create dataframe for top 3 documents with emotion 2:
+senti.nrc %>% filter(sentiment == emo[2])
+ans1=arrange(senti.nrc %>% filter(sentiment == emo[2]),desc(n) )   
+ans2= ans1 %>% slice(1:3)
+for(i in 1:3){
+ind = ans2$index[i]
+df_emo2=rbind((textdf_line%>%filter(textdf_line$linenumber==ind)),df_emo2)
+}
+df_emo2=cbind(df_emo2,emotions=emo[2])
+
+
+
+# Create dataframe for top 3 documents with emotion 3:
+senti.nrc %>% filter(sentiment == emo[3])
+ans1=arrange(senti.nrc %>% filter(sentiment == emo[3]),desc(n) )   
+ans2= ans1 %>% slice(1:3)
+for(i in 1:3){
+ind = ans2$index[i]
+df_emo3=rbind((textdf_line%>%filter(textdf_line$linenumber==ind)),df_emo3)
+}
+df_emo3=cbind(df_emo3,emotions= emo[3])
+
+df_emo=c(df_emo1, df_emo2, df_emo3)
+return (df_emo)
+	
+}
+
+
