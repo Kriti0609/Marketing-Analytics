@@ -1,0 +1,159 @@
+def scraper_function(link,output_filename):
+    import requests
+    import lxml
+    import lxml.html
+    import cssselect
+    #import pandas as pd 
+    import time
+	from selenium import webdriver
+    from selenium.webdriver.common.keys import  Keys
+    driver = webdriver.Chrome('D:/5.0 New Setups/chromedriver_win32/chromedriver')
+	header = {'User-Agent': 'Mozilla/58.0.2 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.167 Safari/537.36'}
+    out=""
+    response = requests.get(link)
+    #response = requests.get('https://www.amazon.in/Barbie-Doll-Playset-Multi-Color/dp/B014DEIYA6/ref=sr_1_1?ie=UTF8&qid=1518691517&sr=8-1&keywords=barbie+dolls+for+girl')
+    tree=lxml.html.fromstring(response.text)
+    review_link_elem=tree.xpath('//a[@id="acrCustomerReviewLink"]')
+    for link in review_link_elem:
+    # we use this if just in case some <a> tags lack an href attribute
+        if 'href' in link.attrib:
+            out=link.attrib['href']
+
+    out="https://www.amazon.in"+out
+
+    #now out contains hyperlink to barbie doll review page
+
+    driver.get(out)
+    many=driver.find_elements_by_xpath("//li[@data-reftag='cm_cr_arp_d_paging_btm']//a[@href]")
+    list_links=[]
+    list_pg_num=[]
+    final_list_links=[]
+    for elem in many:
+        list_links.append(elem.get_attribute('href'))
+        list_pg_num.append(elem.text)
+
+    length=len(list_pg_num)
+    total_pages=list_pg_num[length-1]
+
+    for j in range(1,int(total_pages)+1,1):
+        final_list_links.append((list_links[length-1]).replace(total_pages,str(j)))
+	#print(final_list_links) for debugging we add this printf to see if the links were created at first place
+
+    my_review_list = [] 
+    for k in range(len(final_list_links)):
+        response1 = requests.get(final_list_links[k],headers=header,timeout=200)
+	if response1.status_code!=200:
+		print("ERROR"+ str(response1.status_code))
+        tree1=lxml.html.fromstring(response1.text)
+        review_text4=tree1.xpath('//span[contains(@data-hook,"review-body")]')
+        print(k,len(review_text4))                  #we check whether it is able to find reviews on each page. alot of times the reviews were coming zero that meams the page wasnt loaded and we searched the tag for review. so 
+							added timeout and icreased its values.
+        for text_line in review_text4:
+            span_text =  text_line.xpath('.//text()')
+            #print(comment_no, len(span_text))
+            #print(span_text)
+            my_review_list.append(span_text)
+
+
+
+    #final_review_list = pd.DataFrame(my_review_list)
+	time.sleep(200) 
+    thefile = open(output_filename, 'w',encoding = 'utf-8')
+    check = 0
+    for items in my_review_list:
+        thefile.writelines(str(check) + '\t')
+        for strings in items:
+            strings = str(strings)        
+            thefile.writelines(strings)
+        thefile.writelines('\n\n')
+        check = check + 1
+    thefile.close()
+    print(str(len(my_review_list))+'\s'+"Reviews written to file"+'\s'+output_filename+'\n')
+
+
+
+
+#################################################  RUNNING COMMANDS ###################################################################################################################
+scraper_function('https://www.amazon.in/Barbie-Doll-Playset-Multi-Color/dp/B014DEIYA6/ref=sr_1_1?ie=UTF8&qid=1518691517&sr=8-1&keywords=barbie+dolls+for+girl','barbie_amazon1.txt')
+scraper_function('https://www.amazon.in/dp/B0756ZFXVB/ref=sspa_dk_left_sx_aax_0?psc=1','mobile_amazon')
+scraper_function('https://www.amazon.in/Samsung-Galaxy-Prime-Black-Memory/dp/B0756RCTK2/ref=sr_1_1?s=electronics&ie=UTF8&qid=1519042139&sr=1-1&keywords=samsung+phones','samsung_amazon.txt')
+scraper_function('https://www.amazon.in/AmazonBasics-High-Speed-HDMI-Cable-Feet/dp/B014I8SSD0/ref=zg_bs_1388977031_2?_encoding=UTF8&psc=1&refRID=Z3MKZWH62D7WAK2HMRHS','cable_amazon.txt')
+scraper_function('https://www.amazon.in/Milton-Thermosteel-Flask-milliliters-Silver/dp/B00MIYM0VS/ref=gbph_tit_m-2_9ff7_cf34ee6a?smid=AT95IG9ONZD7S&pf_rd_p=806e6916-fc43-4528-a74a-58218c0f9ff7&pf_rd_s=merchandised-search-2&pf_rd_t=101&pf_rd_i=1379989031&pf_rd_m=A1VBAL9TL5WCBF&pf_rd_r=T0M9PAVMEAK91TBW7W9N','flask_amazon.txt')
+scraper_function('https://www.amazon.in/Wake-Fit-Orthopaedic-Memory-Mattress-6inch/dp/B00RAEWLQU/ref=sr_1_1?s=kitchen&ie=UTF8&qid=1519047991&sr=1-1&refinements=p_89%3AWake-fit%7CEnglander%7CDREAMZEE%7CSleepyCat%7CSolimo%7CHypnos%7CCoirfit%7CKurl-On','mattress_amazon.txt')
+scraper_function('https://www.amazon.in/Story-Home-Cotton-Yellow-Bedsheet/dp/B00TTYY8B0/ref=sr_1_16?s=kitchen&ie=UTF8&qid=1519048592&sr=8-16&keywords=bedsheet','bedsheet_amazon.txt')
+
+*****************************************************************************************************************************************************************************************
+# this is duplicate copy of code that i just pasted again from jupyter just to have another copy of my code. All above commands ran on the below mentioned code
+
+def scraper_function(link,output_filename):
+    import requests
+    import lxml
+    import lxml.html
+    import cssselect
+    #import pandas as pd 
+    import time
+    from selenium import webdriver
+    from selenium.webdriver.common.keys import  Keys
+    driver = webdriver.Chrome('D:/5.0 New Setups/chromedriver_win32/chromedriver')
+    header = {'User-Agent': 'Mozilla/58.0.2 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.167 Safari/537.36'}
+# added header coz we were getting service unavailable - request was returning 503 error code. amazon blocks automated s/w requests so we fooll it by sending user agent value in header.
+    
+    out=""
+    response = requests.get(link)
+    #response = requests.get('https://www.amazon.in/Barbie-Doll-Playset-Multi-Color/dp/B014DEIYA6/ref=sr_1_1?ie=UTF8&qid=1518691517&sr=8-1&keywords=barbie+dolls+for+girl')
+    tree=lxml.html.fromstring(response.text)
+    review_link_elem=tree.xpath('//a[@id="acrCustomerReviewLink"]')
+    for link in review_link_elem:
+    # we use this if just in case some <a> tags lack an href attribute
+        if 'href' in link.attrib:
+            out=link.attrib['href']
+
+    out="https://www.amazon.in"+out
+
+    #now out contains hyperlink to barbie doll review page or other topic first web-page
+
+    driver.get(out)
+    many=driver.find_elements_by_xpath("//li[@data-reftag='cm_cr_arp_d_paging_btm']//a[@href]")
+    list_links=[]
+    list_pg_num=[]
+    final_list_links=[]
+    for elem in many:
+        list_links.append(elem.get_attribute('href'))
+        list_pg_num.append(elem.text)
+
+    length=len(list_pg_num)
+    total_pages=list_pg_num[length-1]
+
+    for j in range(1,int(total_pages)+1,1):
+        final_list_links.append((list_links[length-1]).replace(total_pages,str(j)))
+    print(final_list_links)    # we add this for debugging purpose just to see whether all links were generated
+    
+    my_review_list = [] 
+    for k in range(len(final_list_links)):
+        response1 = requests.get(final_list_links[k],headers=header,timeout=None)
+        if response1.status_code!=200:
+            print("ERROR"+ str(response1.status_code),"K"+str(k))
+        tree1=lxml.html.fromstring(response1.text)
+        review_text4=tree1.xpath('//span[contains(@data-hook,"review-body")]')
+        print(k,len(review_text4))
+        for text_line in review_text4:
+            span_text =  text_line.xpath('.//text()')
+            #print(comment_no, len(span_text))
+            #print(span_text)
+            my_review_list.append(span_text)
+
+
+
+    #final_review_list = pd.DataFrame(my_review_list)
+    time.sleep(200) 
+    thefile = open(output_filename, 'w',encoding = 'utf-8')
+    check = 0
+    for items in my_review_list:
+        thefile.writelines(str(check) + '\t')
+        for strings in items:
+            strings = str(strings)        
+            thefile.writelines(strings)
+        thefile.writelines('\n\n')
+        check = check + 1
+    thefile.close()
+    print(str(len(my_review_list))+'\s'+"Reviews written to file"+'\s'+output_filename+'\n')
